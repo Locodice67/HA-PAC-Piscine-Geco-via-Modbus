@@ -1,6 +1,6 @@
 # Pool-Heat-Pump-IPHCR45-Modbus
 
-**🌍 Langue / Language : [🇫🇷 Français](#français) · [🇬🇧 English](#english) · [🇩🇪 Deutsch](#deutsch) · [🇳🇱 Nederlands](#nederlands)**
+**🌍 Language : [🇫🇷 Français](#français) · [🇬🇧 English](#english) · [🇩🇪 Deutsch](#deutsch) · [🇳🇱 Nederlands](#nederlands)**
 
 ![IPHCR45](custom_components/pool_heat_pump_iphcr45_modbus/brand/logo.png)
 
