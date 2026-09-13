@@ -1,20 +1,6 @@
 {
   "config": {
     "step": {
-      "user": {
-        "title": "Marque de la PAC",
-        "description": "Sélectionnez la marque de votre pompe à chaleur.",
-        "data": {
-          "brand": "Marque"
-        }
-      },
-      "model": {
-        "title": "Modèle de la PAC",
-        "description": "Sélectionnez le modèle correspondant à votre appareil.",
-        "data": {
-          "model": "Modèle"
-        }
-      },
       "connection": {
         "title": "Connexion Modbus",
         "description": "Entrez les informations de connexion à la passerelle Modbus TCP/IP de la PAC.",

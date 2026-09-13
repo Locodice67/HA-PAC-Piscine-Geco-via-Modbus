@@ -13,52 +13,24 @@ from .const import (
     DEFAULT_PORT,
     SCAN_INTERVAL,
 )
-from .models import BRANDS, DEFAULT_BRAND, DEFAULT_MODEL
+from .models import DEFAULT_BRAND, DEFAULT_MODEL
 
 
 class PoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Configuration en trois étapes : Marque -> Modèle -> Connexion."""
+    """Configuration en une seule étape : Connexion Modbus."""
 
     VERSION = 1
 
     def __init__(self):
-        self._brand = None
-        self._model = None
+        # Marque et modèle ne sont plus demandés : on enregistre le défaut,
+        # ce qui laisse intact le reste du code (résolution du jeu de registres).
+        self._brand = DEFAULT_BRAND
+        self._model = DEFAULT_MODEL
 
-    # --- Étape 1 : choix de la marque ------------------------------------
+    # --- Étape unique : paramètres de connexion --------------------------
     async def async_step_user(self, user_input=None):
-        if user_input is not None:
-            self._brand = user_input[CONF_BRAND]
-            return await self.async_step_model()
+        return await self.async_step_connection(user_input)
 
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_BRAND, default=DEFAULT_BRAND): vol.In(
-                    {key: brand["name"] for key, brand in BRANDS.items()}
-                )
-            }
-        )
-        return self.async_show_form(step_id="user", data_schema=schema)
-
-    # --- Étape 2 : choix du modèle (liste dépendant de la marque) --------
-    async def async_step_model(self, user_input=None):
-        models = BRANDS[self._brand]["models"]
-
-        if user_input is not None:
-            self._model = user_input[CONF_MODEL]
-            return await self.async_step_connection()
-
-        default_model = DEFAULT_MODEL if DEFAULT_MODEL in models else next(iter(models))
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_MODEL, default=default_model): vol.In(
-                    {key: config["name"] for key, config in models.items()}
-                )
-            }
-        )
-        return self.async_show_form(step_id="model", data_schema=schema)
-
-    # --- Étape 3 : paramètres de connexion -------------------------------
     async def async_step_connection(self, user_input=None):
         if user_input is not None:
             await self.async_set_unique_id(
