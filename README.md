@@ -2,8 +2,6 @@
 
 **🌍 Langue / Language : [🇫🇷 Français](#français) · [🇬🇧 English](#english) · [🇩🇪 Deutsch](#deutsch) · [🇳🇱 Nederlands](#nederlands)**
 
-![Geco](custom_components/pool_heat_pump_iphcr45_modbus/brand/logo.png) ![BWT](custom_components/pool_heat_pump_iphcr45_modbus/brand/bwt.png) ![Fairland](custom_components/pool_heat_pump_iphcr45_modbus/brand/fairland.png)
-
 ---
 
 ## Français
