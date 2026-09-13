@@ -19,7 +19,7 @@ Objectif initial : **piloter la pompe à chaleur sans être obligé de passer pa
 | Fonction | Détail | Registre |
 |---|---|---|
 | Marche / Arrêt | Allume ou éteint la PAC | coil 0 |
-| Thermostat | Consigne, mode (Auto/Chaud/Froid) | holding 3 / holding 0 |
+| Thermostat | Consigne, mode (Auto/Chaud/Froid), ventilation (Smart/Silence) | holding 3 / holding 0 / holding 1 |
 | Température courante | Entrée d'eau | input 3 |
 | Température eau (sortie) | Sortie d'eau | input 4 |
 | Température air | Ambiante | input 5 |
@@ -208,7 +208,7 @@ Original goal: **control the heat pump without going through the Tuya cloud**.
 | Feature | Description | Register |
 |---|---|---|
 | Power on/off | Turn the heat pump on or off | coil 0 |
-| Thermostat | Setpoint and mode (Auto/Heat/Cool) | holding 3 / holding 0 |
+| Thermostat | Setpoint, mode (Auto/Heat/Cool), fan (Smart/Silence) | holding 3 / holding 0 / holding 1 |
 | Current temperature | Water inlet | input 3 |
 | Water outlet temperature | Water outlet | input 4 |
 | Ambient temperature | Air | input 5 |

@@ -195,7 +195,7 @@ CLIMATE = {
     "fan_mode": {
         "address": 1,
         "input_type": "holding",
-        "values": {"low": 2, "medium": 1, "high": 0},
+        "values": {"smart": 0, "silence": 1},
     },
 }
 

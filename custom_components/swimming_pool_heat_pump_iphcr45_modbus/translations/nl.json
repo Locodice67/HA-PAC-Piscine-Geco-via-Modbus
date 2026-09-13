@@ -105,7 +105,15 @@
     },
     "climate": {
       "thermostat": {
-        "name": "Thermostaat"
+        "name": "Thermostat",
+        "state_attributes": {
+          "fan_mode": {
+            "state": {
+              "smart": "Smart (100%)",
+              "silence": "Silence (85%)"
+            }
+          }
+        }
       }
     }
   }
