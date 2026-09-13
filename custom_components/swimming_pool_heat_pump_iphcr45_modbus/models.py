@@ -161,7 +161,7 @@ SELECTS = [
         "address": 1,
         "input_type": "holding",
         "icon": "mdi:speedometer",
-        "options": {"smart": 0, "silence": 1, "super_silence": 2, "turbo": 3},
+        "options": {"smart": 0, "silence": 1},
     },
 ]
 

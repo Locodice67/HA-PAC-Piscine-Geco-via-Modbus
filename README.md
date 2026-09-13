@@ -26,7 +26,7 @@ Objectif initial : **piloter la pompe à chaleur sans être obligé de passer pa
 | Compresseur | Pourcentage de charge | input 0 |
 | Intensité compresseur | Courant absorbé | input 11 |
 | Tension PFC | Tension interne | input 2 |
-| Mode de travail | Smart / Silence / Super Silence / Turbo | holding 1 |
+| Mode de travail | Smart / Silence | holding 1 |
 | Défauts | Défaut général, défaut E3 | discrete 16 / 51 |
 | Diagnostic | État de la communication Modbus | — |
 
@@ -215,7 +215,7 @@ Original goal: **control the heat pump without going through the Tuya cloud**.
 | Compressor | Load percentage | input 0 |
 | Compressor current | Current draw | input 11 |
 | PFC voltage | Internal voltage | input 2 |
-| Working mode | Smart / Silence / Super Silence / Turbo | holding 1 |
+| Working mode | Smart / Silence | holding 1 |
 | Faults | General fault, E3 fault | discrete 16 / 51 |
 | Diagnostic | Modbus communication status | — |
 

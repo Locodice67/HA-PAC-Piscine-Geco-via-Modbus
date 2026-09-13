@@ -99,9 +99,7 @@
         "name": "Working mode",
         "state": {
           "smart": "Smart (100%)",
-          "silence": "Silence (85%)",
-          "super_silence": "Super Silence (24%)",
-          "turbo": "Turbo"
+          "silence": "Silence (85%)"
         }
       }
     },
