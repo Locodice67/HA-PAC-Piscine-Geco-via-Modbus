@@ -48,7 +48,7 @@ Couper l'alimentation puis **attendre 5 minutes** avant d'ouvrir (voir l'étique
 
 **2. Repérer le connecteur RS485**
 
-C'est le petit connecteur **4 broches `CN12`** de la carte (série `MWH298-V3`) — broches `B`, `A`, `G`, `+12V`. C'est le port normalement prévu pour le module Wi-Fi optionnel.
+C'est le petit connecteur **4 broches `A` `B` `G` `12v`** de la carte (série `MWH298-V3`) —  C'est le port normalement prévu pour le module Wi-Fi optionnel.
 
 ![Repérage du connecteur CN12](images/localise_the_connecteur.jpg)
 
