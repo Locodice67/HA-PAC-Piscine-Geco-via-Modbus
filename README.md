@@ -121,7 +121,7 @@ Paramètres → Appareils et services → **Ajouter une intégration** → *Swim
 | Champ | Valeur usuelle |
 |---|---|
 | Adresse IP | IP de la passerelle RS485 → Ethernet |
-| Port TCP | `4196` (défaut Waveshare ; modifiable — ex. `4197`) |
+| Port TCP | `4196` (valeur par défaut ; modifiable) |
 | Adresse Modbus (esclave) | `1` |
 | Intervalle de rafraîchissement | `30` s |
 
@@ -310,7 +310,7 @@ Settings → Devices & services → **Add integration** → *Swimming-Pool-Heat-
 | Field | Usual value |
 |---|---|
 | IP address | RS485 → Ethernet gateway IP |
-| TCP port | `4196` (Waveshare default; configurable — e.g. `4197`) |
+| TCP port | `4196` (default; configurable) |
 | Modbus unit (slave) id | `1` |
 | Refresh interval | `30` s |
 
