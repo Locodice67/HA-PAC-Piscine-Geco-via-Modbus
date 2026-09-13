@@ -1,0 +1,114 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Marke der Wärmepumpe",
+        "description": "Wählen Sie die Marke Ihrer Wärmepumpe.",
+        "data": {
+          "brand": "Marke"
+        }
+      },
+      "model": {
+        "title": "Modell der Wärmepumpe",
+        "description": "Wählen Sie das Modell, das zu Ihrem Gerät passt.",
+        "data": {
+          "model": "Modell"
+        }
+      },
+      "connection": {
+        "title": "Modbus-Verbindung",
+        "description": "Geben Sie die Verbindungsdaten des Modbus-TCP/IP-Gateways der Wärmepumpe ein.",
+        "data": {
+          "host": "IP-Adresse",
+          "port": "TCP-Port",
+          "unit_id": "Modbus-Einheit (Slave)",
+          "scan_interval": "Aktualisierungsintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Modbus-Gateway nicht möglich",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Diese Wärmepumpe ist bereits konfiguriert"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen der IPHCR45-Pool-Wärmepumpe",
+        "data": {
+          "scan_interval": "Aktualisierungsintervall (Sekunden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature_eau": {
+        "name": "Wassertemperatur"
+      },
+      "temperature_air": {
+        "name": "Lufttemperatur"
+      },
+      "intensite_compresseur": {
+        "name": "Kompressorstrom"
+      },
+      "tension_pfc": {
+        "name": "PFC-Spannung"
+      },
+      "compresseur": {
+        "name": "Kompressor"
+      }
+    },
+    "binary_sensor": {
+      "modbus_status": {
+        "name": "Status der Modbus-Kommunikation"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "defaut_general": {
+        "name": "Allgemeiner Fehler"
+      },
+      "defaut_e3": {
+        "name": "Fehler E3"
+      }
+    },
+    "switch": {
+      "marche_arret": {
+        "name": "Ein/Aus"
+      }
+    },
+    "number": {
+      "consigne_temperature": {
+        "name": "Solltemperatur"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Modus",
+        "state": {
+          "auto": "Auto",
+          "heat": "Heizen",
+          "cool": "Kühlen"
+        }
+      },
+      "mode_travail": {
+        "name": "Betriebsmodus",
+        "state": {
+          "smart": "Smart (100%)",
+          "silence": "Silence (85%)",
+          "super_silence": "Super Silence (24%)",
+          "turbo": "Turbo"
+        }
+      }
+    },
+    "climate": {
+      "thermostat": {
+        "name": "Thermostat"
+      }
+    }
+  }
+}

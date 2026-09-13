@@ -37,7 +37,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Options de la PAC Piscine Geco",
+        "title": "Options de la PAC Piscine IPHCR45",
         "data": {
           "scan_interval": "Intervalle de rafraîchissement (secondes)"
         }

@@ -1,16 +1,18 @@
-# PAC Piscine Geco
+# Swimming-Pool-Heat-Pump-IPHCR45-Modbus
 
 **🌍 Langue / Language : [🇫🇷 Français](#français) · [🇬🇧 English](#english)**
 
-![Geco](custom_components/pac_piscine_geco/brand/logo.png)
+![IPHCR45](custom_components/swimming_pool_heat_pump_iphcr45_modbus/brand/logo.png)
 
 ---
 
 ## Français
 
-Intégration Home Assistant pour piloter une **PAC (pompe à chaleur) de piscine Geco** — testée sur **GEPAC08 (compresseur INVERTER)** — en **Modbus TCP**, via une passerelle RS485 → Ethernet. **Aucun cloud, aucune connexion Internet** : tout reste local.
+Intégration Home Assistant pour piloter une **PAC (pompe à chaleur) de piscine** en **Modbus TCP**, via une passerelle RS485 → Ethernet. **Aucun cloud, aucune connexion Internet** : tout reste local.
 
-Objectif initial : **débloquer le mode « Super Silence »** (production limitée, appareil plus silencieux et plus sobre).
+La référence **IPHCR45** correspond à une pompe à chaleur de piscine **Full Inverter** haute performance de la marque **Fairland**, souvent distribuée sous différentes marques ou gammes : **Geco / AES / Madimack / BWT / Rapid / Confort**.
+
+Objectif initial : **piloter la pompe à chaleur sans être obligé de passer par le cloud Tuya**.
 
 ### Fonctionnalités
 
@@ -34,9 +36,9 @@ Chaque fonction est exposée comme entité dans Home Assistant (voir le tableau 
 
 - Une **passerelle RS485 → Ethernet** (testé : Waveshare RS485 TO ETH / POE).
 - Le connecteur **RS485** de la carte de contrôle de la PAC (port prévu pour le module Wi-Fi optionnel).
-- Un câble entre la PAC et la passerelle (UTP conseillé : **3 fils** — `B`, `A`, `G`).
+- Un câble entre la PAC et la passerelle. Un **câble RJ45** convient.
 
-Le port RS485 est le connecteur **`CN12`** de la carte de contrôle (broches `B`, `A`, `G`, `+12V`).
+Le port RS485 est le connecteur de la carte de contrôle (broches `B`, `A`, `G`, `+12V`).
 
 ### Montage pas à pas
 
@@ -44,17 +46,19 @@ Le port RS485 est le connecteur **`CN12`** de la carte de contrôle (broches `B`
 
 Couper l'alimentation puis **attendre 5 minutes** avant d'ouvrir (voir l'étiquette « CAUTION » sur le capot).
 
+Déposer les vis du dessus et de l'alimentation, puis enlever les caches. Dévisser ensuite les vis du couvercle « CAUTION » et du capot voisin (**7 à 8 vis**).
+
 ![Ouverture du coffret](images/open_the_box.jpg)
 
 **2. Repérer le connecteur RS485**
 
-C'est le petit connecteur **4 broches `A` `B` `G` `12v`** de la carte (série `MWH298-V3`) —  C'est le port normalement prévu pour le module Wi-Fi optionnel.
+C'est le petit connecteur **4 broches `B`, `A`, `G`, `+12V`** de la carte. C'est le port normalement prévu pour le module Wi-Fi optionnel.
 
-![Repérage du connecteur CN12](images/localise_the_connecteur.jpg)
+![Repérage du connecteur](images/localise_the_connecteur.jpg)
 
 **3. Câbler le connecteur**
 
-Relier **`B` → `B`**, **`A` → `A`** et **`G` → `GND`**. Le **`+12V` n'est pas nécessaire** : la passerelle est alimentée en **PoE** (ou par sa propre alimentation).
+Relier **`B` → `B`**, **`A` → `A`** et **`G` → `GND`**. La passerelle est alimentée en **PoE** : le **`+12V` n'est pas nécessaire**. Un **câble RJ45** convient.
 
 ![Câblage du connecteur](images/wire_the_connector.jpg)
 
@@ -62,7 +66,7 @@ Relier **`B` → `B`**, **`A` → `A`** et **`G` → `GND`**. Le **`+12V` n'est 
 
 | Article | Lien |
 |---|---|
-| **Kit de connecteurs JST-XH** (2/3/4/5/6 broches, pas 2,54 mm) — pour réaliser le connecteur `CN12` | [Amazon.fr — YIXISI, 460 pièces](https://www.amazon.fr/dp/B082ZLYRRN) |
+| **Kit de connecteurs JST-XH** (2/3/4/5/6 broches, pas 2,54 mm) — pour réaliser le connecteur | [Amazon.fr — YIXISI, 460 pièces](https://www.amazon.fr/dp/B082ZLYRRN) |
 | **Passerelle RS485 → Ethernet, 1 canal** | [Amazon.fr — Waveshare](https://www.amazon.fr/dp/B0BRNBTFVC) |
 | **Passerelle RS485 → Ethernet, 2 canaux** (une seule passerelle pour deux équipements) | [Amazon.fr — Waveshare](https://www.amazon.fr/dp/B0CB8LXQFH) |
 
@@ -79,7 +83,12 @@ Dans l'interface web de la passerelle (Waveshare RS485 TO ETH / POE) :
 | **Device Port** | `4196` (défaut Waveshare ; ici `4197`) |
 | **Baud Rate / Databits / Parity / Stopbits** | `9600` / `8` / `None` / `1` |
 | **IP mode** | `Static` |
+| **Device IP** | IP de la passerelle elle-même |
 | **Esclave Modbus** | `1` |
+
+> - **Device IP** : l'adresse IP de la passerelle elle-même ; à adapter à la plage d'adresses (**IP Range**) de ton réseau.
+> - **Destination IP** : on peut y mettre la même adresse que **Device IP**, ou l'adresse de **Home Assistant**. Dans notre cas, ce réglage semble sans effet.
+> - **Enable Multi-Host** : à activer **en premier** ; c'est ce réglage qui fait apparaître l'option **Time Out**.
 
 ![Configuration de la passerelle Waveshare](images/config_waveshare.png)
 
@@ -88,16 +97,26 @@ Dans l'interface web de la passerelle (Waveshare RS485 TO ETH / POE) :
 **Via HACS (dépôt personnalisé)**
 
 1. HACS → Intégrations → ⋯ → *Dépôts personnalisés*
-2. Ajouter `Locodice67/HA-Swimming-Pool-Heat-Pump-Geco-Modbus`, catégorie *Intégration*
+2. Ajouter `Locodice67/Swimming-Pool-Heat-Pump-IPHCR45-Modbus`, catégorie *Intégration*
 3. Installer, puis redémarrer Home Assistant
 
 **Manuelle**
 
-Copier le dossier `custom_components/pac_piscine_geco/` dans `/config/custom_components/`, puis redémarrer Home Assistant.
+Copier le dossier `custom_components/swimming_pool_heat_pump_iphcr45_modbus/` dans `/config/custom_components/`, puis redémarrer Home Assistant.
+
+### Mise à niveau depuis `pac_piscine_geco`
+
+Le domaine de l'intégration a changé (`pac_piscine_geco` → `swimming_pool_heat_pump_iphcr45_modbus`). Home Assistant identifie une intégration par le nom de son dossier : **une entrée de configuration existante ne se chargera plus** après la mise à jour. La migration se fait une seule fois :
+
+1. Paramètres → Appareils et services → **PAC Piscine** → ⋯ → **Supprimer**.
+2. **Redémarrer Home Assistant**.
+3. Ré-ajouter l'intégration (*Swimming-Pool-Heat-Pump-IPHCR45-Modbus*) avec les mêmes paramètres de connexion.
+
+Les `entity_id` sont recréés à l'identique (le nom de l'appareil, « PAC Piscine », est inchangé), donc les automatisations et les dashboards continuent de fonctionner.
 
 ### Configuration
 
-Paramètres → Appareils et services → **Ajouter une intégration** → *PAC Piscine Geco*.
+Paramètres → Appareils et services → **Ajouter une intégration** → *Swimming-Pool-Heat-Pump-IPHCR45-Modbus*.
 
 | Champ | Valeur usuelle |
 |---|---|
@@ -138,34 +157,10 @@ Un simple thermostat + un bouton marche/arrêt + les capteurs suffisent. Exemple
 - **Mesures** — températures eau/air, compresseur, intensité, tension PFC
 - **État** — défauts, communication Modbus
 
-### Automatisation d'exemple : « Super Silence »
-
-Séquence type : allumer la PAC, laisser quelques secondes, régler la consigne, puis passer en mode **Super Silence**.
-
-```yaml
-# Exemple (à adapter) : PAC ON -> 30 °C -> Super Silence
-actions:
-  - action: switch.turn_on
-    target:
-      entity_id: switch.pac_piscine_marche_arret
-  - delay:
-      seconds: 5
-  - action: climate.set_temperature
-    target:
-      entity_id: climate.pac_piscine_thermostat
-    data:
-      temperature: 30
-  - action: select.select_option
-    target:
-      entity_id: select.pac_piscine_mode_de_travail
-    data:
-      option: super_silence
-```
-
 ### Limitations
 
 - **Mode de travail (registre 1)** : sur l'unité testée (**GEPAC08**), l'**écriture** du registre 1 est **refusée** par la carte (testé avec `0`, `2` et `3`), alors que l'écriture d'autres registres `holding` fonctionne (la consigne, registre 3, passe). Le mode reste donc **lisible** mais **non pilotable** via Modbus sur ce firmware (réglage au clavier de la PAC). À vérifier selon les modèles.
-- Les adresses proviennent de la **fiche Modbus officielle des cartes MWH216 / MWH298**. Les cartes Geco / AES / Madimack se ressemblent, mais le modèle exact peut différer : vérifie les valeurs (températures eau/air) contre les mesures réelles.
+- Les adresses proviennent de la **fiche Modbus officielle des cartes MWH216 / MWH298**. Les cartes **Geco / AES / Madimack / BWT / Rapid / Confort / Fairland** se ressemblent, mais le modèle exact peut différer : vérifie les valeurs (températures eau/air) contre les mesures réelles.
 
 ### Matériel de référence
 
@@ -202,9 +197,11 @@ Valeurs relevées sur la plaque signalétique de l'unité de développement.
 
 ## English
 
-Home Assistant integration to control a **Geco swimming pool heat pump** — tested on a **GEPAC08 (INVERTER compressor)** — over **Modbus TCP**, through an RS485 → Ethernet gateway. **No cloud, no Internet connection required**: everything runs locally.
+Home Assistant integration to control a **swimming pool heat pump** over **Modbus TCP**, through an RS485 → Ethernet gateway. **No cloud, no Internet connection required**: everything runs locally.
 
-Original goal: **unlock the “Super Silence” mode** (limited output, quieter and more efficient unit).
+The **IPHCR45** reference is a high-performance **Full Inverter** swimming pool heat pump from **Fairland**, often distributed under different brands or ranges: **Geco / AES / Madimack / BWT / Rapid / Confort**.
+
+Original goal: **control the heat pump without going through the Tuya cloud**.
 
 ### Features
 
@@ -228,9 +225,9 @@ Every feature is exposed as an entity in Home Assistant (see the entity table be
 
 - An **RS485 → Ethernet gateway** (tested: Waveshare RS485 TO ETH / POE).
 - The **RS485** connector on the heat pump control board (the port intended for the optional Wi-Fi module).
-- A cable between the heat pump and the gateway (UTP recommended: **3 wires** — `B`, `A`, `G`).
+- A cable between the heat pump and the gateway. A **RJ45 cable** is suitable.
 
-The RS485 port is the **`CN12`** connector on the control board (pins `B`, `A`, `G`, `+12V`).
+The RS485 port is the connector on the control board (pins `B`, `A`, `G`, `+12V`).
 
 ### Step-by-step assembly
 
@@ -238,17 +235,19 @@ The RS485 port is the **`CN12`** connector on the control board (pins `B`, `A`, 
 
 Switch off the power, then **wait 5 minutes** before opening (see the “CAUTION” label on the cover).
 
+Remove the screws on the top and on the power supply, then take off the covers. Then unscrew the screws of the “CAUTION” cover and of the adjacent hood (**7 to 8 screws**).
+
 ![Opening the box](images/open_the_box.jpg)
 
 **2. Locate the RS485 connector**
 
-It is the small **4-pin `CN12`** connector on the board (MWH298-V3 series) — pins `B`, `A`, `G`, `+12V`. This is the port normally intended for the optional Wi-Fi module.
+It is the small **4-pin `B`, `A`, `G`, `+12V`** connector on the board. This is the port normally intended for the optional Wi-Fi module.
 
-![Locating the CN12 connector](images/localise_the_connecteur.jpg)
+![Locating the connector](images/localise_the_connecteur.jpg)
 
 **3. Wire the connector**
 
-Connect **`B` → `B`**, **`A` → `A`** and **`G` → `GND`**. **`+12V` is not needed**: the gateway is powered over **PoE** (or by its own supply).
+Connect **`B` → `B`**, **`A` → `A`** and **`G` → `GND`**. The gateway is powered over **PoE**, so **`+12V` is not needed**. A **RJ45 cable** is suitable.
 
 ![Wiring the connector](images/wire_the_connector.jpg)
 
@@ -256,7 +255,7 @@ Connect **`B` → `B`**, **`A` → `A`** and **`G` → `GND`**. **`+12V` is not 
 
 | Item | Link |
 |---|---|
-| **JST-XH connector kit** (2/3/4/5/6 pins, 2.54 mm) — to build the `CN12` connector | [Amazon.fr — YIXISI, 460 pcs](https://www.amazon.fr/dp/B082ZLYRRN) |
+| **JST-XH connector kit** (2/3/4/5/6 pins, 2.54 mm) — to build the connector | [Amazon.fr — YIXISI, 460 pcs](https://www.amazon.fr/dp/B082ZLYRRN) |
 | **RS485 → Ethernet gateway, 1 channel** | [Amazon.fr — Waveshare](https://www.amazon.fr/dp/B0BRNBTFVC) |
 | **RS485 → Ethernet gateway, 2 channels** (a single gateway for two devices) | [Amazon.fr — Waveshare](https://www.amazon.fr/dp/B0CB8LXQFH) |
 
@@ -273,7 +272,12 @@ In the gateway web UI (Waveshare RS485 TO ETH / POE):
 | **Device Port** | `4196` (Waveshare default; here `4197`) |
 | **Baud Rate / Databits / Parity / Stopbits** | `9600` / `8` / `None` / `1` |
 | **IP mode** | `Static` |
+| **Device IP** | The gateway's own IP address |
 | **Modbus slave** | `1` |
+
+> - **Device IP**: the gateway's own IP address; keep it consistent with your network's IP range.
+> - **Destination IP**: can be set to the same address as **Device IP**, or to **Home Assistant**'s address. In our case this setting appears to have no effect.
+> - **Enable Multi-Host**: enable this **first**; it then exposes the **Time Out** setting.
 
 ![Waveshare gateway configuration](images/config_waveshare.png)
 
@@ -282,16 +286,26 @@ In the gateway web UI (Waveshare RS485 TO ETH / POE):
 **Via HACS (custom repository)**
 
 1. HACS → Integrations → ⋯ → *Custom repositories*
-2. Add `Locodice67/HA-Swimming-Pool-Heat-Pump-Geco-Modbus`, category *Integration*
+2. Add `Locodice67/Swimming-Pool-Heat-Pump-IPHCR45-Modbus`, category *Integration*
 3. Install, then restart Home Assistant
 
 **Manual**
 
-Copy the `custom_components/pac_piscine_geco/` folder into `/config/custom_components/`, then restart Home Assistant.
+Copy the `custom_components/swimming_pool_heat_pump_iphcr45_modbus/` folder into `/config/custom_components/`, then restart Home Assistant.
+
+### Upgrade from `pac_piscine_geco`
+
+The integration domain changed (`pac_piscine_geco` → `swimming_pool_heat_pump_iphcr45_modbus`). Home Assistant identifies an integration by its folder name, so **an existing configuration entry will no longer load** after the update. Migration is a one-time operation:
+
+1. Settings → Devices & services → **PAC Piscine** → ⋯ → **Delete**.
+2. **Restart Home Assistant**.
+3. Re-add the integration (*Swimming-Pool-Heat-Pump-IPHCR45-Modbus*) with the same connection settings.
+
+Entity IDs are recreated identically (the device name, “PAC Piscine”, is unchanged), so automations and dashboards keep working.
 
 ### Configuration
 
-Settings → Devices & services → **Add integration** → *PAC Piscine Geco*.
+Settings → Devices & services → **Add integration** → *Swimming-Pool-Heat-Pump-IPHCR45-Modbus*.
 
 | Field | Usual value |
 |---|---|
@@ -332,34 +346,10 @@ A thermostat plus an on/off button and the sensors are enough. Suggested layout:
 - **Measurements** — water/air temperatures, compressor, current, PFC voltage
 - **Status** — faults, Modbus communication
 
-### Example automation: “Super Silence”
-
-Typical sequence: turn the heat pump on, wait a few seconds, set the setpoint, then switch to **Super Silence**.
-
-```yaml
-# Example (adapt as needed): heat pump ON -> 30 °C -> Super Silence
-actions:
-  - action: switch.turn_on
-    target:
-      entity_id: switch.pac_piscine_marche_arret
-  - delay:
-      seconds: 5
-  - action: climate.set_temperature
-    target:
-      entity_id: climate.pac_piscine_thermostat
-    data:
-      temperature: 30
-  - action: select.select_option
-    target:
-      entity_id: select.pac_piscine_mode_de_travail
-    data:
-      option: super_silence
-```
-
 ### Limitations
 
 - **Working mode (register 1)**: on the tested unit (**GEPAC08**) the **write** to register 1 is **rejected** by the board (tested with `0`, `2` and `3`), while other `holding` writes work (the setpoint, register 3, goes through). The mode is therefore **readable** but **not controllable** over Modbus on this firmware (it is set on the heat pump keypad). Model dependent.
-- The addresses come from the **official Modbus documentation for the MWH216 / MWH298 boards**. Geco / AES / Madimack boards look alike, but the exact model may differ: verify the values (water/air temperatures) against actual measurements.
+- The addresses come from the **official Modbus documentation for the MWH216 / MWH298 boards**. **Geco / AES / Madimack / BWT / Rapid / Confort / Fairland** boards look alike, but the exact model may differ: verify the values (water/air temperatures) against actual measurements.
 
 ### Reference hardware
 
@@ -394,4 +384,4 @@ Values read from the nameplate of the development unit.
 
 ---
 
-[⬆️ Haut / Top](#pac-piscine-geco)
+[⬆️ Haut / Top](#swimming-pool-heat-pump-iphcr45-modbus)

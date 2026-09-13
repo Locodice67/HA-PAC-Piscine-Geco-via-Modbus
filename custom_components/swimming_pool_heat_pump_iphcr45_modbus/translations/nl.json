@@ -1,0 +1,114 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Merk van de warmtepomp",
+        "description": "Selecteer het merk van uw warmtepomp.",
+        "data": {
+          "brand": "Merk"
+        }
+      },
+      "model": {
+        "title": "Model van de warmtepomp",
+        "description": "Selecteer het model dat overeenkomt met uw toestel.",
+        "data": {
+          "model": "Model"
+        }
+      },
+      "connection": {
+        "title": "Modbus-verbinding",
+        "description": "Voer de verbindingsgegevens in van de Modbus TCP/IP-gateway van de warmtepomp.",
+        "data": {
+          "host": "IP-adres",
+          "port": "TCP-poort",
+          "unit_id": "Modbus-eenheid (slave)",
+          "scan_interval": "Verversingsinterval (seconden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken met de Modbus-gateway",
+      "unknown": "Onverwachte fout"
+    },
+    "abort": {
+      "already_configured": "Deze warmtepomp is al geconfigureerd"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties van de IPHCR45-poolwarmtepomp",
+        "data": {
+          "scan_interval": "Verversingsinterval (seconden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature_eau": {
+        "name": "Watertemperatuur"
+      },
+      "temperature_air": {
+        "name": "Luchttemperatuur"
+      },
+      "intensite_compresseur": {
+        "name": "Compressorstroom"
+      },
+      "tension_pfc": {
+        "name": "PFC-spanning"
+      },
+      "compresseur": {
+        "name": "Compressor"
+      }
+    },
+    "binary_sensor": {
+      "modbus_status": {
+        "name": "Status van de Modbus-communicatie"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "defaut_general": {
+        "name": "Algemene fout"
+      },
+      "defaut_e3": {
+        "name": "Fout E3"
+      }
+    },
+    "switch": {
+      "marche_arret": {
+        "name": "Aan/Uit"
+      }
+    },
+    "number": {
+      "consigne_temperature": {
+        "name": "Gewenste temperatuur"
+      }
+    },
+    "select": {
+      "mode": {
+        "name": "Modus",
+        "state": {
+          "auto": "Auto",
+          "heat": "Verwarmen",
+          "cool": "Koelen"
+        }
+      },
+      "mode_travail": {
+        "name": "Werkmodus",
+        "state": {
+          "smart": "Smart (100%)",
+          "silence": "Silence (85%)",
+          "super_silence": "Super Silence (24%)",
+          "turbo": "Turbo"
+        }
+      }
+    },
+    "climate": {
+      "thermostat": {
+        "name": "Thermostaat"
+      }
+    }
+  }
+}

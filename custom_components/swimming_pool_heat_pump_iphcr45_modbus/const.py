@@ -1,4 +1,4 @@
-DOMAIN = "pac_piscine_geco"
+DOMAIN = "swimming_pool_heat_pump_iphcr45_modbus"
 
 CONF_HOST = "host"
 CONF_PORT = "port"

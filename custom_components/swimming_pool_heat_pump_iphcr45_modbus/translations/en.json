@@ -37,7 +37,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Geco pool heat pump options",
+        "title": "IPHCR45 pool heat pump options",
         "data": {
           "scan_interval": "Refresh interval (seconds)"
         }
