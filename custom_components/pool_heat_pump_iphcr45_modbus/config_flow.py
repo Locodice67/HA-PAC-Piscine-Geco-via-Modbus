@@ -16,7 +16,7 @@ from .const import (
 from .models import BRANDS, DEFAULT_BRAND, DEFAULT_MODEL
 
 
-class SwimmingPoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class PoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Configuration en trois étapes : Marque -> Modèle -> Connexion."""
 
     VERSION = 1
@@ -90,10 +90,10 @@ class SwimmingPoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, dom
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return SwimmingPoolHeatPumpIphcr45ModbusOptionsFlow()
+        return PoolHeatPumpIphcr45ModbusOptionsFlow()
 
 
-class SwimmingPoolHeatPumpIphcr45ModbusOptionsFlow(config_entries.OptionsFlow):
+class PoolHeatPumpIphcr45ModbusOptionsFlow(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)

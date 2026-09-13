@@ -1,6 +1,6 @@
 # Plan de travail — PAC Piscine IPHCR45
 
-Feuille de route de l'intégration `swimming_pool_heat_pump_iphcr45_modbus`.
+Feuille de route de l'intégration `pool_heat_pump_iphcr45_modbus`.
 Dernière mise à jour : 2026-09-11.
 
 ---
@@ -8,7 +8,7 @@ Dernière mise à jour : 2026-09-11.
 ## État actuel
 
 ### Terminé ✅
-- Intégration custom `swimming_pool_heat_pump_iphcr45_modbus` : `climate`, `switch`, `number`, 2 `select`, 5 `sensor`, 3 `binary_sensor`.
+- Intégration custom `pool_heat_pump_iphcr45_modbus` : `climate`, `switch`, `number`, 2 `select`, 5 `sensor`, 3 `binary_sensor`.
 - Renommage **Greco → Geco** (domaine, dossier, textes, dépôt GitHub).
 - Images de marque : `brand/icon.png`, `icon@2x.png`, `logo.png`, `logo@2x.png`.
 - Modèle corrigé en **`GEPAC08 (Modbus)`** ; courant compresseur borné à **10 A**.

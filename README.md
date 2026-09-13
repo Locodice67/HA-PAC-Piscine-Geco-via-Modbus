@@ -1,8 +1,8 @@
-# Swimming-Pool-Heat-Pump-IPHCR45-Modbus
+# Pool-Heat-Pump-IPHCR45-Modbus
 
 **🌍 Langue / Language : [🇫🇷 Français](#français) · [🇬🇧 English](#english)**
 
-![IPHCR45](custom_components/swimming_pool_heat_pump_iphcr45_modbus/brand/logo.png)
+![IPHCR45](custom_components/pool_heat_pump_iphcr45_modbus/brand/logo.png)
 
 ---
 
@@ -97,26 +97,26 @@ Dans l'interface web de la passerelle (Waveshare RS485 TO ETH / POE) :
 **Via HACS (dépôt personnalisé)**
 
 1. HACS → Intégrations → ⋯ → *Dépôts personnalisés*
-2. Ajouter `Locodice67/Swimming-Pool-Heat-Pump-IPHCR45-Modbus`, catégorie *Intégration*
+2. Ajouter `Locodice67/Pool-Heat-Pump-IPHCR45-Modbus`, catégorie *Intégration*
 3. Installer, puis redémarrer Home Assistant
 
 **Manuelle**
 
-Copier le dossier `custom_components/swimming_pool_heat_pump_iphcr45_modbus/` dans `/config/custom_components/`, puis redémarrer Home Assistant.
+Copier le dossier `custom_components/pool_heat_pump_iphcr45_modbus/` dans `/config/custom_components/`, puis redémarrer Home Assistant.
 
 ### Mise à niveau depuis `pac_piscine_geco`
 
-Le domaine de l'intégration a changé (`pac_piscine_geco` → `swimming_pool_heat_pump_iphcr45_modbus`). Home Assistant identifie une intégration par le nom de son dossier : **une entrée de configuration existante ne se chargera plus** après la mise à jour. La migration se fait une seule fois :
+Le domaine de l'intégration a changé (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant identifie une intégration par le nom de son dossier : **une entrée de configuration existante ne se chargera plus** après la mise à jour. La migration se fait une seule fois :
 
 1. Paramètres → Appareils et services → **PAC Piscine** → ⋯ → **Supprimer**.
 2. **Redémarrer Home Assistant**.
-3. Ré-ajouter l'intégration (*Swimming-Pool-Heat-Pump-IPHCR45-Modbus*) avec les mêmes paramètres de connexion.
+3. Ré-ajouter l'intégration (*Pool-Heat-Pump-IPHCR45-Modbus*) avec les mêmes paramètres de connexion.
 
 Les `entity_id` sont recréés à l'identique (le nom de l'appareil, « PAC Piscine », est inchangé), donc les automatisations et les dashboards continuent de fonctionner.
 
 ### Configuration
 
-Paramètres → Appareils et services → **Ajouter une intégration** → *Swimming-Pool-Heat-Pump-IPHCR45-Modbus*.
+Paramètres → Appareils et services → **Ajouter une intégration** → *Pool-Heat-Pump-IPHCR45-Modbus*.
 
 | Champ | Valeur usuelle |
 |---|---|
@@ -286,26 +286,26 @@ In the gateway web UI (Waveshare RS485 TO ETH / POE):
 **Via HACS (custom repository)**
 
 1. HACS → Integrations → ⋯ → *Custom repositories*
-2. Add `Locodice67/Swimming-Pool-Heat-Pump-IPHCR45-Modbus`, category *Integration*
+2. Add `Locodice67/Pool-Heat-Pump-IPHCR45-Modbus`, category *Integration*
 3. Install, then restart Home Assistant
 
 **Manual**
 
-Copy the `custom_components/swimming_pool_heat_pump_iphcr45_modbus/` folder into `/config/custom_components/`, then restart Home Assistant.
+Copy the `custom_components/pool_heat_pump_iphcr45_modbus/` folder into `/config/custom_components/`, then restart Home Assistant.
 
 ### Upgrade from `pac_piscine_geco`
 
-The integration domain changed (`pac_piscine_geco` → `swimming_pool_heat_pump_iphcr45_modbus`). Home Assistant identifies an integration by its folder name, so **an existing configuration entry will no longer load** after the update. Migration is a one-time operation:
+The integration domain changed (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant identifies an integration by its folder name, so **an existing configuration entry will no longer load** after the update. Migration is a one-time operation:
 
 1. Settings → Devices & services → **PAC Piscine** → ⋯ → **Delete**.
 2. **Restart Home Assistant**.
-3. Re-add the integration (*Swimming-Pool-Heat-Pump-IPHCR45-Modbus*) with the same connection settings.
+3. Re-add the integration (*Pool-Heat-Pump-IPHCR45-Modbus*) with the same connection settings.
 
 Entity IDs are recreated identically (the device name, “PAC Piscine”, is unchanged), so automations and dashboards keep working.
 
 ### Configuration
 
-Settings → Devices & services → **Add integration** → *Swimming-Pool-Heat-Pump-IPHCR45-Modbus*.
+Settings → Devices & services → **Add integration** → *Pool-Heat-Pump-IPHCR45-Modbus*.
 
 | Field | Usual value |
 |---|---|
@@ -384,4 +384,4 @@ Values read from the nameplate of the development unit.
 
 ---
 
-[⬆️ Haut / Top](#swimming-pool-heat-pump-iphcr45-modbus)
+[⬆️ Haut / Top](#pool-heat-pump-iphcr45-modbus)

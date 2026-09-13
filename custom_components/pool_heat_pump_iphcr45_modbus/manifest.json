@@ -1,0 +1,13 @@
+{
+  "domain": "pool_heat_pump_iphcr45_modbus",
+  "name": "Pool-Heat-Pump-IPHCR45-Modbus",
+  "codeowners": ["@Locodice67"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/Locodice67/Pool-Heat-Pump-IPHCR45-Modbus",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Locodice67/Pool-Heat-Pump-IPHCR45-Modbus/issues",
+  "requirements": ["pymodbus>=3.9.2"],
+  "version": "0.2.4"
+}
