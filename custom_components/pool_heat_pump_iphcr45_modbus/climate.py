@@ -6,10 +6,15 @@ from homeassistant.components.climate import (
     ClimateEntityFeature,
     HVACMode,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, WRITE_VERIFY_DELAY
+from .controller import PacController
 from .entity import PacDeviceMixin
+from .modbus_handler import ModbusHandler
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,9 +26,13 @@ _HVAC_OPTION_TO_MODE = {
 }
 
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     entry_data = hass.data[DOMAIN][config_entry.entry_id]
-    controller = entry_data["controller"]
+    controller: PacController = entry_data["controller"]
     handler = controller.handler
 
     async_add_entities(
@@ -46,7 +55,14 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_icon = "mdi:heat-pump"
 
-    def __init__(self, hass, handler, controller, entry_id, config):
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        handler: ModbusHandler,
+        controller: PacController,
+        entry_id: str,
+        config: dict,
+    ) -> None:
         self._hass = hass
         self._handler = handler
         self._controller = controller
@@ -89,37 +105,37 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
             "modbus_fan_mode": self._config["fan_mode"]["address"],
         }
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         await self._async_poll_refresh()
         self._controller.add_poll_listener(self._async_poll_refresh)
 
-    async def async_will_remove_from_hass(self):
+    async def async_will_remove_from_hass(self) -> None:
         self._controller.remove_poll_listener(self._async_poll_refresh)
 
-    def _to_value(self, raw, spec):
+    def _to_value(self, raw: int, spec: dict) -> float:
         return round(
             raw * spec.get("scale", 1) + spec.get("offset", 0),
             spec.get("precision", 0),
         )
 
-    def _to_raw(self, value, spec):
+    def _to_raw(self, value: float, spec: dict) -> int:
         scale = spec.get("scale", 1) or 1
         return int(round((value - spec.get("offset", 0)) / scale))
 
-    async def _read(self, spec):
+    async def _read(self, spec: dict) -> int | None:
         return await self._hass.async_add_executor_job(
             self._handler.read, spec["address"], spec["input_type"]
         )
 
-    async def _write(self, spec, raw) -> bool:
+    async def _write(self, spec: dict, raw: int) -> bool:
         ok = await self._hass.async_add_executor_job(
             self._handler.write, spec["address"], raw, spec["input_type"]
         )
         if not ok:
-            _LOGGER.warning("Échec d'écriture Modbus à %s", spec["address"])
+            _LOGGER.warning("Modbus write failed at %s", spec["address"])
             return False
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(WRITE_VERIFY_DELAY)
         verified = await self._hass.async_add_executor_job(
             self._handler.read_verified,
             spec["address"],
@@ -129,7 +145,7 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
         )
         if not verified:
             _LOGGER.warning(
-                "Écriture non confirmée par l'appareil (registre %s)", spec["address"]
+                "Write not confirmed by the device (register %s)", spec["address"]
             )
             return False
         return True
@@ -168,7 +184,7 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
         self.async_write_ha_state()
         return any_success
 
-    async def async_set_temperature(self, **kwargs):
+    async def async_set_temperature(self, **kwargs) -> None:
         temperature = kwargs.get(ATTR_TEMPERATURE)
         if temperature is None:
             return
@@ -179,7 +195,7 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
             self._attr_target_temperature = temperature
             self.async_write_ha_state()
 
-    async def async_set_hvac_mode(self, hvac_mode):
+    async def async_set_hvac_mode(self, hvac_mode) -> None:
         spec = self._config["hvac_mode"]
         for option, mode in _HVAC_OPTION_TO_MODE.items():
             if mode == hvac_mode:
@@ -191,7 +207,7 @@ class PacThermostat(PacDeviceMixin, ClimateEntity):
                     self.async_write_ha_state()
                 return
 
-    async def async_set_fan_mode(self, fan_mode):
+    async def async_set_fan_mode(self, fan_mode) -> None:
         spec = self._config["fan_mode"]
         raw = spec["values"].get(fan_mode)
         if raw is None:

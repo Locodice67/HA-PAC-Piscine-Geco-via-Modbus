@@ -2,16 +2,25 @@ import asyncio
 import logging
 
 from homeassistant.components.switch import SwitchEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, WRITE_VERIFY_DELAY
+from .controller import PacController
 from .entity import PacDeviceMixin
+from .modbus_handler import ModbusHandler
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     entry_data = hass.data[DOMAIN][config_entry.entry_id]
-    controller = entry_data["controller"]
+    controller: PacController = entry_data["controller"]
     handler = controller.handler
 
     async_add_entities(
@@ -30,7 +39,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class PacSwitch(PacDeviceMixin, SwitchEntity):
     _attr_should_poll = False
 
-    def __init__(self, hass, handler, controller, entry_id, config):
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        handler: ModbusHandler,
+        controller: PacController,
+        entry_id: str,
+        config: dict,
+    ) -> None:
         self._hass = hass
         self._handler = handler
         self._controller = controller
@@ -47,11 +63,11 @@ class PacSwitch(PacDeviceMixin, SwitchEntity):
     def extra_state_attributes(self):
         return {"modbus_address": self._config["address"]}
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         await self._async_poll_refresh()
         self._controller.add_poll_listener(self._async_poll_refresh)
 
-    async def async_will_remove_from_hass(self):
+    async def async_will_remove_from_hass(self) -> None:
         self._controller.remove_poll_listener(self._async_poll_refresh)
 
     async def _async_poll_refresh(self) -> bool:
@@ -64,13 +80,13 @@ class PacSwitch(PacDeviceMixin, SwitchEntity):
         self.async_write_ha_state()
         return True
 
-    async def async_turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs) -> None:
         await self._write(self._config["on_value"], True)
 
-    async def async_turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs) -> None:
         await self._write(self._config["off_value"], False)
 
-    async def _write(self, value, expected_on):
+    async def _write(self, value: int, expected_on: bool) -> None:
         ok = await self._hass.async_add_executor_job(
             self._handler.write,
             self._config["address"],
@@ -78,10 +94,10 @@ class PacSwitch(PacDeviceMixin, SwitchEntity):
             self._config["input_type"],
         )
         if not ok:
-            _LOGGER.warning("Échec d'écriture de la marche/arrêt de la PAC (%s)", value)
+            _LOGGER.warning("Failed to write heat pump on/off state (%s)", value)
             return
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(WRITE_VERIFY_DELAY)
         verified = await self._hass.async_add_executor_job(
             self._handler.read_verified,
             self._config["address"],
@@ -90,7 +106,7 @@ class PacSwitch(PacDeviceMixin, SwitchEntity):
             0,
         )
         if not verified:
-            _LOGGER.warning("Commande de la PAC non confirmée par l'appareil (%s)", value)
+            _LOGGER.warning("Heat pump command not confirmed by the device (%s)", value)
             return
 
         self._attr_is_on = expected_on

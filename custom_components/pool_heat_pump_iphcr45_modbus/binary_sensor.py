@@ -2,15 +2,24 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .controller import PacController
 from .entity import PacDeviceMixin
+from .modbus_handler import ModbusHandler
 
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     entry_data = hass.data[DOMAIN][config_entry.entry_id]
-    controller = entry_data["controller"]
+    controller: PacController = entry_data["controller"]
     handler = controller.handler
     entry_id = config_entry.entry_id
 
@@ -25,7 +34,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class ModbusStatusSensor(PacDeviceMixin, BinarySensorEntity):
     """État local de la liaison Modbus (diagnostic), pas une I/O de l'appareil."""
 
-    def __init__(self, entry_id, controller):
+    def __init__(self, entry_id: str, controller: PacController) -> None:
         self._entry_id = entry_id
         self._controller = controller
 
@@ -37,10 +46,15 @@ class ModbusStatusSensor(PacDeviceMixin, BinarySensorEntity):
         self._attr_is_on = controller.modbus_ok
 
     @property
+    def available(self) -> bool:
+        """Toujours disponible : cette entité rend compte de la liaison elle-même."""
+        return True
+
+    @property
     def is_on(self):
         return self._controller.modbus_ok
 
-    async def async_update(self):
+    async def async_update(self) -> None:
         self._attr_is_on = self._controller.modbus_ok
 
 
@@ -49,7 +63,14 @@ class PacRegisterBinarySensor(PacDeviceMixin, BinarySensorEntity):
 
     _attr_should_poll = False
 
-    def __init__(self, config, hass, handler, controller, entry_id):
+    def __init__(
+        self,
+        config: dict,
+        hass: HomeAssistant,
+        handler: ModbusHandler,
+        controller: PacController,
+        entry_id: str,
+    ) -> None:
         self._config = config
         self._hass = hass
         self._handler = handler
@@ -70,11 +91,11 @@ class PacRegisterBinarySensor(PacDeviceMixin, BinarySensorEntity):
     def extra_state_attributes(self):
         return {"modbus_address": self._address, "modbus_type": self._input_type}
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         await self._async_poll_refresh()
         self._controller.add_poll_listener(self._async_poll_refresh)
 
-    async def async_will_remove_from_hass(self):
+    async def async_will_remove_from_hass(self) -> None:
         self._controller.remove_poll_listener(self._async_poll_refresh)
 
     async def _async_poll_refresh(self) -> bool:

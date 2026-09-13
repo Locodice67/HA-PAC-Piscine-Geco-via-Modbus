@@ -1,3 +1,6 @@
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+
 from .controller import PacController
 from .const import (
     DOMAIN,
@@ -12,7 +15,7 @@ from .models import DEFAULT_BRAND, DEFAULT_MODEL, resolve_model
 PLATFORMS = ["sensor", "binary_sensor", "switch", "number", "select", "climate"]
 
 
-async def async_setup_entry(hass, entry):
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
 
     data = dict(entry.data)
@@ -45,12 +48,12 @@ async def async_setup_entry(hass, entry):
     return True
 
 
-async def _async_update_listener(hass, entry):
+async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Recharge l'intégration quand les options changent."""
     await hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_unload_entry(hass, entry):
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unloaded:
         controller = hass.data[DOMAIN][entry.entry_id]["controller"]

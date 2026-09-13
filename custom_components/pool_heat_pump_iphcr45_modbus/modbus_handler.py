@@ -21,27 +21,36 @@ class ModbusHandler:
     partagent la même instance.
     """
 
-    def __init__(self, host="192.168.1.100", port=502, unit_id=1, timeout=3):
+    def __init__(
+        self,
+        host: str = "192.168.1.100",
+        port: int = 502,
+        unit_id: int = 1,
+        timeout: int = 3,
+    ) -> None:
         self.host = host
         self.port = port
         self.unit_id = unit_id
         self._client = ModbusTcpClient(host=self.host, port=self.port, timeout=timeout)
         self._lock = threading.Lock()
 
-    def connect(self):
+    def connect(self) -> bool:
         """Ouvre la connexion persistante. Peut être appelé plusieurs fois."""
         with self._lock:
-            self._ensure_connected()
+            return self._ensure_connected()
 
-    def close(self):
+    def close(self) -> None:
         with self._lock:
             self._client.close()
 
-    def _ensure_connected(self):
+    def _ensure_connected(self) -> bool:
         if not self._client.connected:
-            self._client.connect()
+            return bool(self._client.connect())
+        return True
 
-    def read(self, address, input_type=HOLDING, count=1):
+    def read(
+        self, address: int, input_type: str = HOLDING, count: int = 1
+    ) -> int | None:
         """Lit `count` valeurs et renvoie la première, ou None en cas d'échec."""
         with self._lock:
             try:
@@ -65,7 +74,7 @@ class ModbusHandler:
 
                 if result.isError():
                     _LOGGER.debug(
-                        "Erreur de lecture Modbus à %s (%s) : %s",
+                        "Modbus read error at %s (%s): %s",
                         address,
                         input_type,
                         result,
@@ -77,11 +86,11 @@ class ModbusHandler:
                 return result.registers[0]
             except Exception as err:
                 _LOGGER.debug(
-                    "Exception de lecture Modbus à %s (%s) : %s", address, input_type, err
+                    "Modbus read exception at %s (%s): %s", address, input_type, err
                 )
                 return None
 
-    def write(self, address, value, input_type=HOLDING):
+    def write(self, address: int, value: int, input_type: str = HOLDING) -> bool:
         with self._lock:
             try:
                 self._ensure_connected()
@@ -96,11 +105,17 @@ class ModbusHandler:
                 return not result.isError()
             except Exception as err:
                 _LOGGER.debug(
-                    "Exception d'écriture Modbus à %s (%s) : %s", address, input_type, err
+                    "Modbus write exception at %s (%s): %s", address, input_type, err
                 )
                 return False
 
-    def read_verified(self, address, expected_value, input_type=HOLDING, tolerance=0):
+    def read_verified(
+        self,
+        address: int,
+        expected_value: int,
+        input_type: str = HOLDING,
+        tolerance: int = 0,
+    ) -> bool:
         """Relit un registre après une écriture pour confirmer qu'elle est appliquée.
 
         Opération verrouillée séparée (pas imbriquée) : à appeler après write(),

@@ -1,5 +1,6 @@
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.config_entries import ConfigEntry, OptionsFlow
 from homeassistant.core import callback
 
 from .const import (
@@ -21,17 +22,17 @@ class PoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, domain=DOMA
 
     VERSION = 1
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Marque et modèle ne sont plus demandés : on enregistre le défaut,
         # ce qui laisse intact le reste du code (résolution du jeu de registres).
         self._brand = DEFAULT_BRAND
         self._model = DEFAULT_MODEL
 
     # --- Étape unique : paramètres de connexion --------------------------
-    async def async_step_user(self, user_input=None):
+    async def async_step_user(self, user_input: dict | None = None):
         return await self.async_step_connection(user_input)
 
-    async def async_step_connection(self, user_input=None):
+    async def async_step_connection(self, user_input: dict | None = None):
         if user_input is not None:
             await self.async_set_unique_id(
                 f"{user_input[CONF_HOST]}:{user_input[CONF_PORT]}:{user_input[CONF_UNIT_ID]}"
@@ -61,12 +62,12 @@ class PoolHeatPumpIphcr45ModbusConfigFlow(config_entries.ConfigFlow, domain=DOMA
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry):
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
         return PoolHeatPumpIphcr45ModbusOptionsFlow()
 
 
 class PoolHeatPumpIphcr45ModbusOptionsFlow(config_entries.OptionsFlow):
-    async def async_step_init(self, user_input=None):
+    async def async_step_init(self, user_input: dict | None = None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 

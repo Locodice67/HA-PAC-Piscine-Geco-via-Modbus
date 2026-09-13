@@ -1,4 +1,5 @@
 from .const import DOMAIN
+from .controller import PacController
 from .models import DEVICE_NAME
 
 
@@ -10,6 +11,12 @@ class PacDeviceMixin:
     """
 
     _entry_id: str
+    _controller: PacController
+
+    @property
+    def available(self) -> bool:
+        """Entité indisponible tant que la liaison Modbus n'est pas établie."""
+        return self._controller.modbus_ok
 
     @property
     def device_info(self):
