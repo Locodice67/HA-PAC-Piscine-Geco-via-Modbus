@@ -104,16 +104,6 @@ Dans l'interface web de la passerelle (Waveshare RS485 TO ETH / POE) :
 
 Copier le dossier `custom_components/pool_heat_pump_iphcr45_modbus/` dans `/config/custom_components/`, puis redémarrer Home Assistant.
 
-### Mise à niveau depuis `pac_piscine_geco`
-
-Le domaine de l'intégration a changé (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant identifie une intégration par le nom de son dossier : **une entrée de configuration existante ne se chargera plus** après la mise à jour. La migration se fait une seule fois :
-
-1. Paramètres → Appareils et services → **PAC Piscine** → ⋯ → **Supprimer**.
-2. **Redémarrer Home Assistant**.
-3. Ré-ajouter l'intégration (*Pool-Heat-Pump-IPHCR45-Modbus*) avec les mêmes paramètres de connexion.
-
-Les `entity_id` sont recréés à l'identique (le nom de l'appareil, « PAC Piscine », est inchangé), donc les automatisations et les dashboards continuent de fonctionner.
-
 ### Configuration
 
 Paramètres → Appareils et services → **Ajouter une intégration** → *Pool-Heat-Pump-IPHCR45-Modbus*.
@@ -292,16 +282,6 @@ In the gateway web UI (Waveshare RS485 TO ETH / POE):
 **Manual**
 
 Copy the `custom_components/pool_heat_pump_iphcr45_modbus/` folder into `/config/custom_components/`, then restart Home Assistant.
-
-### Upgrade from `pac_piscine_geco`
-
-The integration domain changed (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant identifies an integration by its folder name, so **an existing configuration entry will no longer load** after the update. Migration is a one-time operation:
-
-1. Settings → Devices & services → **PAC Piscine** → ⋯ → **Delete**.
-2. **Restart Home Assistant**.
-3. Re-add the integration (*Pool-Heat-Pump-IPHCR45-Modbus*) with the same connection settings.
-
-Entity IDs are recreated identically (the device name, “PAC Piscine”, is unchanged), so automations and dashboards keep working.
 
 ### Configuration
 
@@ -482,16 +462,6 @@ In der Weboberfläche des Gateways (Waveshare RS485 TO ETH / POE):
 
 Den Ordner `custom_components/pool_heat_pump_iphcr45_modbus/` nach `/config/custom_components/` kopieren, dann Home Assistant neu starten.
 
-### Upgrade von `pac_piscine_geco`
-
-Die Domain der Integration hat sich geändert (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant erkennt eine Integration am Namen ihres Ordners: **ein bestehender Konfigurationseintrag wird nach dem Update nicht mehr geladen**. Die Migration erfolgt einmalig:
-
-1. Einstellungen → Geräte & Dienste → **PAC Piscine** → ⋯ → **Löschen**.
-2. **Home Assistant neu starten**.
-3. Die Integration erneut hinzufügen (*Pool-Heat-Pump-IPHCR45-Modbus*) mit denselben Verbindungseinstellungen.
-
-Die `entity_id`s werden identisch neu erzeugt (der Gerätename „PAC Piscine“ bleibt unverändert), daher funktionieren Automatisierungen und Dashboards weiter.
-
 ### Konfiguration
 
 Einstellungen → Geräte & Dienste → **Integration hinzufügen** → *Pool-Heat-Pump-IPHCR45-Modbus*.
@@ -670,16 +640,6 @@ In de webinterface van de gateway (Waveshare RS485 TO ETH / POE):
 **Handmatig**
 
 Kopieer de map `custom_components/pool_heat_pump_iphcr45_modbus/` naar `/config/custom_components/` en start Home Assistant opnieuw op.
-
-### Upgraden vanaf `pac_piscine_geco`
-
-Het domein van de integratie is gewijzigd (`pac_piscine_geco` → `pool_heat_pump_iphcr45_modbus`). Home Assistant herkent een integratie aan de naam van de map: **een bestaande configuratievermelding wordt na de update niet meer geladen**. De migratie gebeurt eenmalig:
-
-1. Instellingen → Apparaten & diensten → **PAC Piscine** → ⋯ → **Verwijderen**.
-2. **Home Assistant opnieuw opstarten**.
-3. De integratie opnieuw toevoegen (*Pool-Heat-Pump-IPHCR45-Modbus*) met dezelfde verbindingsinstellingen.
-
-De `entity_id`'s worden identiek opnieuw aangemaakt (de apparaatnaam „PAC Piscine“ blijft ongewijzigd), dus automatiseringen en dashboards blijven werken.
 
 ### Configuratie
 
